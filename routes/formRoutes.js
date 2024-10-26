@@ -70,4 +70,24 @@ router.get("/forms/:id/responses", auth, async (req, res) => {
   }
 });
 
+// Delete a form and its responses by ID
+router.delete('/forms/:id', auth, async (req, res) => {
+  try {
+    const formId = req.params.id;
+
+    // Delete the form by ID
+    const deletedForm = await Form.findByIdAndDelete(formId);
+    if (!deletedForm) {
+      return res.status(404).json({ message: 'Form not found' });
+    }
+
+    // Delete all responses associated with the form
+    await Response.deleteMany({ formId });
+
+    res.status(200).json({ message: 'Form and associated responses deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete form', error });
+  }
+});
+
 module.exports = router;
