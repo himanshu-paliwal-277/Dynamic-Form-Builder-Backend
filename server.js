@@ -13,7 +13,16 @@ console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// CORS (Cross-Origin Resource Sharing) configuration
+const corsOptions = {
+  origin: 'https://dynamic-form-builder-react.vercel.app', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  credentials: true, // Allow credentials (if needed)
+};
+
+// Use CORS middleware with options
+app.use(cors(corsOptions));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {
