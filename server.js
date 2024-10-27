@@ -16,7 +16,10 @@ app.use(express.json());
 
 // CORS (Cross-Origin Resource Sharing) configuration
 const corsOptions = {
-  origin: 'https://dynamic-form-builder-react.vercel.app', // Replace with your frontend URL
+  origin: [
+    'https://dynamic-form-builder-react.vercel.app', // Production URL
+    'http://localhost:5173' // Local development URL on port 5173
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   credentials: true, // Allow credentials (if needed)
 };
