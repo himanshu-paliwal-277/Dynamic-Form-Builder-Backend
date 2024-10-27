@@ -18,6 +18,7 @@ app.use(express.json());
 const corsOptions = {
   origin: [
     'https://dynamic-form-builder-react.vercel.app', // Production URL
+    "https://dynamic-form-builder-react-js.netlify.app",
     'http://localhost:5173' // Local development URL on port 5173
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
