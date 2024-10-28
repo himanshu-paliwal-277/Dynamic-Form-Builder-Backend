@@ -48,10 +48,12 @@ router.get("/forms/:id", async (req, res) => {
 router.post("/forms/:id/responses", async (req, res) => {
   try {
     const { id } = req.params;
-    const newResponse = new Response({
+    const responseData = {
       formId: id,
-      answers: req.body, // Contains all answers with field names as keys
-    });
+      answers: { ...req.body }  // Spread req.body to ensure it's a plain object
+    };
+
+    const newResponse = new Response(responseData);
     await newResponse.save();
     res.status(201).json({ message: "Response saved successfully" });
   } catch (error) {
