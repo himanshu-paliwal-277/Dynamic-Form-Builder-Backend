@@ -21,8 +21,8 @@ const corsOptions = {
     "https://dynamic-form-builder-react-js.netlify.app",
     'http://localhost:5173' // Local development URL on port 5173
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-  credentials: true, // Allow credentials (if needed)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
 };
 
 // Use CORS middleware with options
@@ -37,6 +37,10 @@ mongoose.connect(process.env.MONGO_URL, {
 // Routes
 app.use("/api", formRoutes);
 app.use("/api/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Dynamic Form Builder API");
+});
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

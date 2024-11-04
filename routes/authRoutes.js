@@ -7,8 +7,20 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const user = new User({ username, email, password }); // Store password directly
-    await user.save();
+
+    // Check if user already exists
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // check if email is valid or not
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email" });
+    }
+    const newUser = new User({ username, email, password }); // Store password directly
+    await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error registering user", error });
@@ -23,14 +35,12 @@ router.post("/login", async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("User not found"); // Debugging output
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "User not found" });
     }
 
     // Check if password matches
     if (user.password !== password) {
-      console.log("Password mismatch"); // Debugging output
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid password" });
     }
 
     // Generate JWT token
@@ -44,8 +54,7 @@ router.post("/login", async (req, res) => {
       userEmail: email,
     });
   } catch (error) {
-    console.error("Error logging in:", error); // Log specific error details
-    res.status(500).json({ message: "Error logging in", error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
